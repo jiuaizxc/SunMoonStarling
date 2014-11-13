@@ -8,11 +8,11 @@ package com.sunmoon.game.utils
 		private var _b:ByteArray;
 		private var _key:int;
 		
-		public function EUint()
+		public function EUint(v:uint = 0)
 		{
 			_b = new ByteArray();
 			_key = Math.random() * 99999;
-			value = 0;
+			value = v;
 		}
 		
 		public function set value(v:uint):void
