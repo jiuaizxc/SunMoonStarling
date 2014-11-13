@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.sunmoon.game.extension.tilemap.TileMap"/>
+    <classEntry path="com.sunmoon.game.extension.tilemap.TileLayer"/>
+    <classEntry path="com.sunmoon.game.extension.tilemap.TileProperty"/>
+    <classEntry path="com.sunmoon.game.extension.tilemap.TileSet"/>
+    <classEntry path="com.sunmoon.game.extension.tilemap.TileObjectGroup"/>
+    <classEntry path="com.sunmoon.game.extension.tilemap.TileObject"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
