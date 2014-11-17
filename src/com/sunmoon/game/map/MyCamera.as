@@ -16,11 +16,6 @@ package com.sunmoon.game.map
 		private var _lack:Boolean;
 		
 		private var _zoom:Number;
-		private var _isZoom:Boolean;
-		
-		private var _minZoom:Number;
-		private var _zoomRate:Number;
-		private var _maxSpeed:Number;
 		
 		private var m_lookL:Number;
 		private var m_lookR:Number;
@@ -51,7 +46,6 @@ package com.sunmoon.game.map
 			m_lookT = m_SH * 0.5;
 			m_lookB = m_SH * 0.5;
 			
-			_isZoom = false;
 			_zoom = 1;
 		}
 		
@@ -77,31 +71,6 @@ package com.sunmoon.game.map
 		}
 		
 		/**
-		 * 开启镜头缩放 
-		 * @param MaxSpeed 开始缩放的最大速度
-		 * @param ZoomRate 镜头与速度的缩放比例
-		 * @param MinZoom 最小缩放的值
-		 * 
-		 */		
-		public function startZoom(MaxSpeed:Number = 10, ZoomRate:Number = 0.015, MinZoom:Number = 0.5):void
-		{
-			_isZoom = true;
-			_maxSpeed = MaxSpeed;
-			_zoomRate = ZoomRate;
-			_minZoom = MinZoom;
-		}
-		
-		/**
-		 * 关闭镜头缩放 
-		 * 
-		 */		
-		public function stopZoom():void
-		{
-			_isZoom = false;
-			_zoom = 1;
-		}
-		
-		/**
 		 * 设置镜头跟随目标 
 		 * @param target
 		 * 
@@ -123,16 +92,8 @@ package com.sunmoon.game.map
 		public function run():void
 		{
 			if(_lack) return;
-			if(_isZoom) calculateZoom();
 			moveScene(_target.ix, _target.iz);
 			moveMap(_target.ix, _target.iz);
-		}
-		
-		private function calculateZoom():void
-		{
-			m_zoom = _target.Speed - _maxSpeed;
-			m_zoom = m_zoom < 0 ? 0 :  m_zoom * _zoomRate;
-			_zoom = m_zoom > _minZoom ? _minZoom : 1 - m_zoom;
 		}
 		
 		private function moveScene(X:Number, Y:Number):void
@@ -185,6 +146,16 @@ package com.sunmoon.game.map
 		public function set lack(value:Boolean):void
 		{
 			_lack = value;
+		}
+
+		public function get zoom():Number
+		{
+			return _zoom;
+		}
+
+		public function set zoom(value:Number):void
+		{
+			_zoom = value;
 		}
 	}
 }
