@@ -47,6 +47,7 @@ package com.sunmoon.game.map
 			m_lookB = m_SH * 0.5;
 			
 			_zoom = 1;
+			_lack = true;
 		}
 		
 		public function destroy():void
@@ -62,12 +63,13 @@ package com.sunmoon.game.map
 		 * @param Y
 		 * 
 		 */		
-		public function lookPos(X:Number, Y:Number):void
+		public function lookPos(X:Number, Y:Number, LockY:Boolean = false):void
 		{
 			m_lookL = X;
 			m_lookR = m_SW - X;
 			m_lookT = Y;
 			m_lookB = m_SH - Y;
+			if(LockY) _scene.lockY();
 		}
 		
 		/**

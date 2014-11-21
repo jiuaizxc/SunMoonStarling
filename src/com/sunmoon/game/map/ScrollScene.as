@@ -8,6 +8,8 @@ package com.sunmoon.game.map
 		private var _canvas:DisplayObjectContainer;
 		private var _mapList:Vector.<IMap>;
 		
+		private var _lockY:Boolean;
+		
 		private var m_map:IMap;
 			
 		public function ScrollScene(canvas:DisplayObjectContainer)
@@ -33,11 +35,14 @@ package com.sunmoon.game.map
 			_canvas.addChild(scrollMap as DisplayObject);
 		}
 		
+		public function lockY():void{_lockY = true;}
+		
 		public function moveTo(X:Number, Y:Number, Zoom:Number):void
 		{
 			_canvas.x = X;
-			_canvas.y = Y;
 			_canvas.scaleX = Zoom;
+			if(_lockY) return;
+			_canvas.y = Y;
 			_canvas.scaleY = Zoom;
 		}
 		
