@@ -20,7 +20,7 @@ package morn.core.components{
 		protected var _contentWidth:Number = 0;
 		protected var _contentHeight:Number = 0;
 		protected var _disabled:Boolean;
-		protected var _tag:Object;
+		protected var _userData:Object;
 		protected var _comXml:XML;
 		protected var _dataSource:Object;
 		protected var _toolTip:Object;
@@ -222,12 +222,12 @@ package morn.core.components{
 		}
 		
 		/**标签(冗余字段，可以用来储存数据)*/
-		public function get tag():Object {
-			return _tag;
+		public function get userData():Object {
+			return _userData;
 		}
 		
-		public function set tag(value:Object):void {
-			_tag = value;
+		public function set userData(value:Object):void {
+			_userData = value;
 		}
 		
 		/**组件xml结构(高级用法：动态更改XML，然后通过页面重新渲染)*/

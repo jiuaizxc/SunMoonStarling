@@ -51,7 +51,7 @@ package com.sunmoon.game.schedule
 		 * @param pasued 是否睡眠
 		 * @param interval 时间间隔
 		 * @param delay 时间延迟
-		 * @param repeat 重复次数
+		 * @param repeat 重复次数(一直循环设置为小于等于0)
 		 * 
 		 */		
 		public function resetTimer(pasued:Boolean, interval:int, delay:int, repeat:int):void
@@ -64,6 +64,17 @@ package com.sunmoon.game.schedule
 			_useDelay = delay > 0 ? true : false;
 			_forever = repeat <= 0 ? true : false;
 			
+			_elapsed = 0;
+			_timerExecuted = 0;
+		}
+		
+		/**
+		 *重新计时 
+		 * 
+		 */		
+		public function replay(pasued:Boolean = false):void
+		{
+			_pasued = pasued;
 			_elapsed = 0;
 			_timerExecuted = 0;
 		}

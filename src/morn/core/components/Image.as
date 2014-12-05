@@ -12,6 +12,7 @@ package morn.core.components{
 	{
 		protected var _bitmap:AutoBitmap;
 		protected var _url:String;
+		protected var _isflatten:Boolean;
 		
 		public function Image(url:String = null){
 			mouseEnabled = mouseChildren = false;
@@ -84,5 +85,18 @@ package morn.core.components{
 				super.dataSource = value;
 			}
 		}
+
+		public function get isflatten():Boolean
+		{
+			return _isflatten;
+		}
+
+		public function set isflatten(value:Boolean):void
+		{
+			_isflatten = value;
+			if(_isflatten) flatten();
+			else unflatten();
+		}
+
 	}
 }

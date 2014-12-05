@@ -3,6 +3,8 @@
  * Feedback yungzhu@gmail.com http://weibo.com/newyung
  */
 package morn.core.components{
+	import flash.display.BitmapData;
+	import flash.display.StageQuality;
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.geom.Rectangle;
@@ -14,6 +16,7 @@ package morn.core.components{
 	import morn.core.utils.StringUtils;
 	
 	import starling.display.Image;
+	import starling.textures.Texture;
 	
 	/**文本发生改变后触发*/
 	[Event(name="change",type="flash.events.Event")]
@@ -26,17 +29,11 @@ package morn.core.components{
 		protected var _text:String = "";
 		protected var _isHtml:Boolean;
 		protected var _stroke:String;
-		protected var _skin:String;
-		protected var _bitmap:AutoBitmap;
-		protected var _margin:Array = [0, 0, 0, 0];
 		
-		
-		private var mTextBounds:Rectangle;
 		private var mImage:starling.display.Image;
 		
-		public function Label(text:String = "", skin:String = null) {
+		public function Label(text:String = "") {
 			this.text = text;
-			this.skin = skin;
 		}
 		
 		override protected function preinitialize():void {
@@ -45,7 +42,6 @@ package morn.core.components{
 		}
 		
 		override protected function createChildren():void {
-			_bitmap = new AutoBitmap(this);
 			_textField = new TextField();
 		}
 		
@@ -57,7 +53,6 @@ package morn.core.components{
 			_textField.selectable = false;
 			_textField.autoSize = TextFieldAutoSize.LEFT;
 			_textField.embedFonts = Styles.embedFonts;
-			_bitmap.sizeGrid = [2, 2, 2, 2];
 		}
 		
 		/**显示的文本*/
@@ -76,53 +71,43 @@ package morn.core.components{
 		protected function changeText():void {
 			_textField.defaultTextFormat = _format;
 			_isHtml ? _textField.htmlText = App.lang.getLang(_text) : _textField.text = App.lang.getLang(_text);
-			//draw();
+			draw();
 		}
 		
-		/*protected function draw():void
+		protected function draw():void
 		{
-			if (mTextBounds == null) mTextBounds = new Rectangle();
-			
-			var scale:Number  = Starling.contentScaleFactor;
-			var bitmapData:BitmapData = renderText(scale, mTextBounds);
-			
+			var bitmapData:BitmapData = renderText();
 			var texture:Texture = Texture.fromBitmapData(bitmapData, false, false, scale);
 			texture.root.onRestore = function():void
 			{
-				if(mTextBounds == null) mTextBounds = new Rectangle();
-				texture.root.uploadBitmapData(renderText(scale, mTextBounds));
+				texture.root.uploadBitmapData(renderText());
 			};
-			bitmapData.dispose();
 			
-			if (mImage == null) 
-			{
+			if (mImage == null){
 				mImage = new starling.display.Image(texture);
 				mImage.touchable = false;
 				addChild(mImage);
-			}
-			else 
-			{ 
+			}else{ 
 				mImage.texture.dispose();
 				mImage.texture = texture; 
 				mImage.readjustSize(); 
 			}
-		}*/
+		}
 		
-		protected function changeSize():void {
-			if (!isNaN(_width)) {
-				_textField.autoSize = TextFieldAutoSize.NONE;
-				_textField.width = _width - _margin[0] - _margin[2];
-				if (isNaN(_height) && wordWrap) {
-					_textField.autoSize = TextFieldAutoSize.LEFT;
-				} else {
-					_height = isNaN(_height) ? 18 : _height;
-					_textField.height = _height - _margin[1] - _margin[3];
-				}
-			} else {
-				_width = _height = NaN;
-				_textField.autoSize = TextFieldAutoSize.LEFT;
-			}
-			super.changeSize();
+		protected function renderText():BitmapData
+		{
+			var bitmapData:BitmapData  = new BitmapData(width, height, true, 0x0);
+			var drawWithQualityFunc:Function = 
+				"drawWithQuality" in bitmapData ? bitmapData["drawWithQuality"] : null;
+			
+			// Beginning with AIR 3.3, we can force a drawing quality. Since "LOW" produces
+			// wrong output oftentimes, we force "MEDIUM" if possible.
+			
+			if (drawWithQualityFunc is Function)
+				drawWithQualityFunc.call(bitmapData, _textField, null, null, null, new Rectangle(0, 0, width, height), false, StageQuality.MEDIUM);
+			else
+				bitmapData.draw(_textField, null, null, null, new Rectangle(0, 0, width, height));
+			return bitmapData;
 		}
 		
 		/**是否是html格式*/
@@ -307,18 +292,6 @@ package morn.core.components{
 			callLater(changeText);
 		}
 		
-		/**边距(格式:左边距,上边距,右边距,下边距)*/
-		public function get margin():String {
-			return _margin.join(",");
-		}
-		
-		public function set margin(value:String):void {
-			_margin = StringUtils.fillArray(_margin, value, int);
-			_textField.x = _margin[0];
-			_textField.y = _margin[1];
-			callLater(changeSize);
-		}
-		
 		/**是否嵌入*/
 		public function get embedFonts():Boolean {
 			return _textField.embedFonts;
@@ -348,56 +321,16 @@ package morn.core.components{
 			text += newText;
 		}
 		
-		/**皮肤*/
-		public function get skin():String {
-			return _skin;
-		}
-		
-		public function set skin(value:String):void {
-			if (_skin != value) {
-				_skin = value;
-				_bitmap.texture = App.asset.getTexture(StringUtils.assetsName(_skin));
-				_contentWidth = _bitmap.width;
-				_contentHeight = _bitmap.height;
-			}
-		}
-		
-		/**九宫格信息(格式:左边距,上边距,右边距,下边距)*/
-		public function get sizeGrid():String {
-			return _bitmap.sizeGrid.join(",");
-		}
-		
-		public function set sizeGrid(value:String):void {
-			_bitmap.sizeGrid = StringUtils.fillArray(Styles.defaultSizeGrid, value, int);
-		}
-		
 		override public function commitMeasure():void {
 			exeCallLater(changeText);
-			exeCallLater(changeSize);
 		}
 		
 		override public function get width():Number {
-			if (!isNaN(_width) || Boolean(_skin) || Boolean(_text)) {
-				return super.width;
-			}
-			return 0;
-		}
-		
-		override public function set width(value:Number):void {
-			super.width = value;
-			_bitmap.width = value;
+			return _textField.width;
 		}
 		
 		override public function get height():Number {
-			if (!isNaN(_height) || Boolean(_skin) || Boolean(_text)) {
-				return super.height;
-			}
-			return 0;
-		}
-		
-		override public function set height(value:Number):void {
-			super.height = value;
-			_bitmap.height = value;
+			return _textField.height;
 		}
 		
 		override public function set dataSource(value:Object):void {

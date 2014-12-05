@@ -77,13 +77,13 @@ package com.sunmoon.game.map
 		 * @param target
 		 * 
 		 */		
-		public function lookAt(target:ICamera):void
+		public function lookAt(target:ICamera, force:Boolean = true):void
 		{
 			if(target){
 				_target = target;
 				_scene.setMapTarget(target);
 				_lack = false;
-				run();
+				if(force) run();
 			}else{
 				_target = null;
 				_scene.setMapTarget(null);

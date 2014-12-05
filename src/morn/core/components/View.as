@@ -12,7 +12,8 @@ package morn.core.components{
 		/**加载模式使用，存储uixml*/
 		public static var xmlMap:Object = {};
 		protected static var uiClassMap:Object = {"Box": Box, "Button": Button, "Clip": Clip, "Component": Component, 
-																			"Image": Image, "View": View, "ProgressBar": ProgressBar};
+																			"Image": Image, "View": View, "ProgressBar": ProgressBar, "Label": Label,
+																			"Tab": Tab};
 		
 		protected static var viewClassMap:Object = {};
 		
@@ -42,7 +43,7 @@ package morn.core.components{
 			for each (var attrs:XML in xml.attributes()) {
 				var prop:String = attrs.name().toString();
 				var value:String = attrs;
-				if (comp.hasOwnProperty(prop)) {
+				if (comp.hasOwnProperty(prop)){
 					comp[prop] = (value == "true" ? true : (value == "false" ? false : value))
 				} else if (prop == "var" && view && view.hasOwnProperty(value)) {
 					view[value] = comp;
