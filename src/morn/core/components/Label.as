@@ -104,10 +104,26 @@ package morn.core.components{
 			// wrong output oftentimes, we force "MEDIUM" if possible.
 			
 			if (drawWithQualityFunc is Function)
-				drawWithQualityFunc.call(bitmapData, _textField, null, null, null, new Rectangle(0, 0, width, height), false, StageQuality.MEDIUM);
+				drawWithQualityFunc.call(bitmapData, _textField, null, null, null, null, false, StageQuality.MEDIUM);
 			else
-				bitmapData.draw(_textField, null, null, null, new Rectangle(0, 0, width, height));
+				bitmapData.draw(_textField);
 			return bitmapData;
+		}
+		
+		override protected function changeSize():void {
+			if (!isNaN(_width)) {
+				_textField.autoSize = TextFieldAutoSize.NONE;
+				_textField.width = _width;
+				if (isNaN(_height) && wordWrap) {
+					_textField.autoSize = TextFieldAutoSize.LEFT;
+				} else {
+					_height = isNaN(_height) ? 18 : _height;
+					_textField.height = _height;
+				}
+			} else {
+				_width = _height = NaN;
+				_textField.autoSize = TextFieldAutoSize.LEFT;
+			}
 		}
 		
 		/**是否是html格式*/
@@ -323,13 +339,30 @@ package morn.core.components{
 		
 		override public function commitMeasure():void {
 			exeCallLater(changeText);
+			exeCallLater(changeSize);
 		}
 		
 		override public function get width():Number {
+			if (!isNaN(_width) || Boolean(_text)) {
+				return super.width;
+			}
+			return 0;
+		}
+		
+		override protected function get measureWidth():Number
+		{
 			return _textField.width;
 		}
 		
 		override public function get height():Number {
+			if (!isNaN(_height) || Boolean(_text)) {
+				return super.height;
+			}
+			return 0;
+		}
+		
+		override protected function get measureHeight():Number
+		{
 			return _textField.height;
 		}
 		

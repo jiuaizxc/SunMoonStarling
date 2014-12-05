@@ -124,6 +124,7 @@ package morn.core.components{
 		override public function set width(value:Number):void {
 			if (_width != value) {
 				_width = value;
+				callLater(changeSize);
 			}
 		}
 		
@@ -158,6 +159,7 @@ package morn.core.components{
 		override public function set height(value:Number):void {
 			if (_height != value) {
 				_height = value;
+				callLater(changeSize);
 			}
 		}
 		
@@ -168,6 +170,8 @@ package morn.core.components{
 		override public function set scaleY(value:Number):void {
 			super.scaleY = value;
 		}
+		
+		protected function changeSize():void{}
 		
 		/**执行影响宽高的延迟函数*/
 		public function commitMeasure():void{}

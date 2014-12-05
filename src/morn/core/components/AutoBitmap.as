@@ -99,11 +99,20 @@ package morn.core.components{
 		
 		public function set clips(value:Vector.<Texture>):void {
 			if(value){
+				disposeTempBitmapdata();
 				_clips = value;
-				addImage(value[_index]);
+				if(addImage(value[_index])){
+					_image.texture = value[_index];
+					_image.readjustSize();
+				}
 			}else{
 				removeImage();
 			}
+		}
+		
+		/**销毁临时位图*/
+		private function disposeTempBitmapdata():void {
+			if (_clips) _clips = null;
 		}
 		
 		/**当前切片索引*/
@@ -129,13 +138,14 @@ package morn.core.components{
 			}
 		}
 		
-		private function addImage(value:Texture):void
+		private function addImage(value:Texture):Boolean
 		{
-			if(_image) return;
+			if(_image) return true;
 			_image = new starling.display.Image(value);
 			_image.x = _x;
 			_image.y = _y;
 			_content.addChild(_image);
+			return false;
 		}
 		
 		private function removeImage():void
