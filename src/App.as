@@ -6,10 +6,10 @@ package {
 	import flash.geom.Point;
 	
 	import morn.core.managers.DialogManager;
-	import morn.core.managers.DragManager;
 	import morn.core.managers.LangManager;
 	import morn.core.managers.RenderManager;
 	import morn.core.managers.TimerManager;
+	import morn.core.managers.dragmanager.DragDropManager;
 	import morn.core.utils.ObjectUtils;
 	
 	import starling.display.Stage;
@@ -30,7 +30,7 @@ package {
 		/**对话框管理器*/
 		public static var dialog:DialogManager;
 		/**拖动管理器*/
-		public static var drag:DragManager;
+		public static var drag:DragDropManager;
 		/**语言管理器*/
 		public static var lang:LangManager;
 		
@@ -47,7 +47,7 @@ package {
 			asset = new AssetManager();
 			render = new RenderManager();
 			dialog = new DialogManager();
-			drag = new DragManager();
+			drag = new DragDropManager();
 			lang = new LangManager();
 			
 			stage.addChild(dialog);

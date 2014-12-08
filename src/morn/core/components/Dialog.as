@@ -83,7 +83,7 @@ package morn.core.components{
 			m_Touch = e.getTouch(this, TouchPhase.BEGAN);
 			if(m_Touch){
 				if(_dragArea.contains(m_Touch.globalX, m_Touch.globalY)){
-					App.drag.doDrag(this, m_Touch.globalX, m_Touch.globalY);
+					App.drag.startDrag(this, m_Touch);
 				}
 			}
 		}

@@ -26,6 +26,8 @@ package morn.core.events{
 		
 		public static const SELECT:String = "select";
 		
+		public static const DRAG_OVER:String = "dragover";
+		
 		public function UIEvent(type:String, data:*, bubbles:Boolean = false) {
 			super(type, bubbles, data);
 		}
