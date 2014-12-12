@@ -11,7 +11,7 @@ package com.sunmoon.game.utils
 		public function EInt(v:int = 0)
 		{
 			_b = new ByteArray();
-			_key = Math.random() * 99999;
+			//_key = Math.random() * 99999;
 			value = v;
 		}
 		
@@ -20,12 +20,12 @@ package com.sunmoon.game.utils
 			_b.clear();
 			_b.writeInt(v);
 			_pos = Math.random() * _b.length;
-			_b[_pos] ^= _key;
+			//_b[_pos] ^= _key;
 		}
 		
 		public function get value():int
 		{
-			_b[_pos] ^= _key;
+			//_b[_pos] ^= _key;
 			_b.position = 0;
 			return _b.readInt();
 		}

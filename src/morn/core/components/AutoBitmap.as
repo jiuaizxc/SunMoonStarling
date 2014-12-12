@@ -128,6 +128,10 @@ package morn.core.components{
 			}
 		}
 		
+		public function readjustSize():void {
+			_image.readjustSize();
+		}
+		
 		private function changeSize():void
 		{
 			if(_image){

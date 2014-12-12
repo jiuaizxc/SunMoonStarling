@@ -7,59 +7,31 @@ package morn.core.managers.dragmanager
 	 */
 	public class DragData
 	{
-		/**
-		 * Constructor.
-		 */
-		public function DragData()
+		private var _targetFormat:String;
+		
+		private var _data:Object;
+		
+		public function DragData(Format:String)
 		{
+			_targetFormat = Format;
+			_data = {};
+		}
+		
+		public function destroy():void
+		{
+			_data = null;
+			_targetFormat = null;
 		}
 
-		/**
-		 * @private
-		 */
-		protected var _data:Object = {};
-
-		/**
-		 * Determines if the specified data format is available.
-		 */
-		public function hasDataForFormat(format:String):Boolean
+		public function get targetFormat():String
 		{
-			return this._data.hasOwnProperty(format);
+			return _targetFormat;
 		}
 
-		/**
-		 * Returns data for the specified format.
-		 */
-		public function getDataForFormat(format:String):*
+		public function get data():Object
 		{
-			if(this._data.hasOwnProperty(format))
-			{
-				return this._data[format];
-			}
-			return undefined;
+			return _data;
 		}
 
-		/**
-		 * Saves data for the specified format.
-		 */
-		public function setDataForFormat(format:String, data:*):void
-		{
-			this._data[format] = data;
-		}
-
-		/**
-		 * Removes all data for the specified format.
-		 */
-		public function clearDataForFormat(format:String):*
-		{
-			var data:* = undefined;
-			if(this._data.hasOwnProperty(format))
-			{
-				data = this._data[format];
-			}
-			delete this._data[format];
-			return data;
-
-		}
 	}
 }
