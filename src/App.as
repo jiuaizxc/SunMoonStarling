@@ -46,11 +46,9 @@ package {
 			timer = new TimerManager();
 			asset = new AssetManager();
 			render = new RenderManager();
-			dialog = new DialogManager();
+			dialog = new DialogManager(Value);
 			drag = new DragDropManager();
 			lang = new LangManager();
-			
-			stage.addChild(dialog);
 		}
 		
 		/**获得资源路径(此处可以加上资源版本控制)*/

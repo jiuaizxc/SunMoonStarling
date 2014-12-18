@@ -99,7 +99,7 @@ package
 		 * @return 
 		 * 
 		 */		
-		public function isPasued():Boolean
+		public function get isPasued():Boolean
 		{
 			return !_isPaused;
 		}
@@ -132,6 +132,12 @@ package
 		public static function get assets():AssetManager
 		{
 			return _assets;
+		}
+
+		/** 设计分辨率 */
+		public function get designSize():Point
+		{
+			return _designSize;
 		}
 	}
 }

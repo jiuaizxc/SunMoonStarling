@@ -4,106 +4,88 @@
  */
 package morn.core.managers
 {
-	import morn.core.components.Box;
 	import morn.core.components.Dialog;
 	
-	import starling.display.Shape;
-	import starling.display.Sprite;
-	import starling.events.Event;
+	import starling.display.DisplayObjectContainer;
+	import starling.display.Quad;
+	import starling.display.Stage;
 	
 	/**对话框管理器*/
-	public class DialogManager extends Sprite {
-		private var _box:Box = new Box();
-		private var _mask:Box = new Box();
-		private var _maskBg:Sprite = new Sprite();
+	public class DialogManager{
+		private var _root:DisplayObjectContainer;
+		private var _mask:Quad;
+		private var _isStage:Boolean;
 		
-		public function DialogManager() {
-			addChild(_box);
-			_mask.addChild(_maskBg);
+		private var _dialogList:Vector.<Dialog>;
+		
+		private var _width:Number;
+		private var _height:Number;
+		
+		public function DialogManager(root:Stage){
+			_isStage = false;
+			_dialogList = new Vector.<Dialog>();
 			
-			var bitmap:Shape = new Shape();
-			bitmap.touchGroup = true;
-			bitmap.touchable = false;
-			bitmap.graphics.beginFill(0, 0.4);
-			bitmap.graphics.drawRect(0,0,10,10);
-			bitmap.graphics.endFill();
-			_maskBg.addChild(bitmap);
+			_root = root;
+			_width = root.stageWidth;
+			_height = root.stageHeight;
 			
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-		}
-		
-		private function onAddedToStage(e:Event):void {
-			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			stage.addEventListener(Event.RESIZE, onResize);
-			onResize(null);
-		}
-		
-		private function onResize(e:Event):void {
-			_box.width = _mask.width = stage.stageWidth;
-			_box.height = _mask.height = stage.stageHeight;
-			for (var i:int = _box.numChildren - 1; i > -1; i--) {
-				var item:Dialog = _box.getChildAt(i) as Dialog;
-				if (item.popupCenter) {
-					item.x = (stage.stageWidth - item.width) * 0.5;
-					item.y = (stage.stageHeight - item.height) * 0.5;
-				}
-			}
-			for (i = _mask.numChildren - 1; i > -1; i--) {
-				item = _mask.getChildAt(i) as Dialog;
-				if (item) {
-					if (item.popupCenter) {
-						item.x = (stage.stageWidth - item.width) * 0.5;
-						item.y = (stage.stageHeight - item.height) * 0.5;
-					}
-				} else {
-					var bitmap:Shape = _maskBg.getChildAt(0) as Shape;
-					bitmap.width = stage.stageWidth;
-					bitmap.height = stage.stageHeight;
-				}
-			}
+			_mask = new Quad(_width, _height, 0x000000);
+			_mask.alpha = 0.5;
 		}
 		
 		/**显示对话框(非模式窗口) @param closeOther 是否关闭其他对话框*/
 		public function show(dialog:Dialog, closeOther:Boolean = false):void {
-			if (closeOther) {
-				_box.removeAllChild();
+			if(closeOther) removeAllChild();
+			
+			if (dialog.popupCenter){
+				dialog.x = (_width - dialog.width) * 0.5;
+				dialog.y = (_height - dialog.height) * 0.5;
 			}
-			if (dialog.popupCenter) {
-				dialog.x = (stage.stageWidth - dialog.width) * 0.5;
-				dialog.y = (stage.stageHeight - dialog.height) * 0.5;
+			_root.addChild(dialog);
+			_dialogList.push(dialog);
+		}
+		
+		private function removeAllChild():void
+		{
+			for each(var t:Dialog in _dialogList){
+				t.remove();
 			}
-			_box.addChild(dialog);
 		}
 		
 		/**显示对话框(模式窗口) @param closeOther 是否关闭其他对话框*/
 		public function popup(dialog:Dialog, closeOther:Boolean = false):void {
-			if (closeOther) {
-				_mask.removeAllChild(_maskBg);
-			}
+			if(closeOther) removeAllChild();
+			
 			if (dialog.popupCenter) {
-				dialog.x = (stage.stageWidth - dialog.width) * 0.5;
-				dialog.y = (stage.stageHeight - dialog.height) * 0.5;
+				dialog.x = (_width - dialog.width) * 0.5;
+				dialog.y = (_height - dialog.height) * 0.5;
 			}
-			_mask.addChild(dialog);
-			_mask.swapChildrenAt(_mask.getChildIndex(_maskBg), _mask.numChildren - 2);
-			addChild(_mask);
+			
+			if(!_isStage){
+				_isStage = true;
+				_root.addQuickChild(_mask);
+			}
+			_root.addChild(dialog);
+			_dialogList.push(dialog);
 		}
 		
 		/**删除对话框*/
 		public function close(dialog:Dialog):void {
 			dialog.remove();
-			if (_mask.numChildren > 1) {
-				_mask.swapChildrenAt(_mask.getChildIndex(_maskBg), _mask.numChildren - 2);
-			} else {
-				_mask.remove();
+			var index:int = _dialogList.indexOf(dialog);
+			if(index >= 0) _dialogList.splice(index, 1);
+			
+			if(_dialogList.length == 0){
+				_root.removeQuickChild(_mask);
+				_isStage = false;
 			}
 		}
 		
 		/**删除所有对话框*/
 		public function closeAll():void {
-			_box.removeAllChild();
-			_mask.removeAllChild(_maskBg);
-			_mask.remove();
+			removeAllChild();
+			_root.removeQuickChild(_mask);
+			_isStage = false;
 		}
 	}
 }
