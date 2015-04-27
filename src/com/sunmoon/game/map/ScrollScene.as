@@ -21,7 +21,7 @@ package com.sunmoon.game.map
 		public function destory():void
 		{
 			for each(var map:IMap in _mapList){
-				_canvas.removeChild(map as DisplayObject);
+				_canvas.removeQuickChild(map as DisplayObject);
 				map.destroy();
 			}
 			_mapList.length = 0;
@@ -32,7 +32,7 @@ package com.sunmoon.game.map
 		public function addMap(scrollMap:IMap):void
 		{
 			_mapList.push(scrollMap);
-			_canvas.addChild(scrollMap as DisplayObject);
+			_canvas.addQuickChild(scrollMap as DisplayObject);
 		}
 		
 		public function lockY():void{_lockY = true;}

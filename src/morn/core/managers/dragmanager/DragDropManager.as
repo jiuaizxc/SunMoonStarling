@@ -138,7 +138,9 @@ package morn.core.managers.dragmanager
 				target = target.parent;
 			}
 			
-			if(target) target.globalToLocal(location, location);
+			if(target){
+				target.globalToLocal(location, location);
+			}
 			
 			if(target != _dropTarget)
 			{

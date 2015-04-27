@@ -31,13 +31,13 @@ package com.sunmoon.game.schedule
 		 * @param value BasicSchedule一个基本的调度器封装类（可以使继承此类的任何子类）
 		 * 
 		 */		
-		public function addSchedule(value:BasicSchedule):void
+		public function addSchedule(value:BasicSchedule):BasicSchedule
 		{
 			checkObject(value);
 			
 			var basic:BasicSchedule = _scheduleAllObject[value.target][value.callBackFunc];
 			var index:int;
-			if(basic){
+			if(basic != null){
 				index = _removeList.indexOf(basic);
 				if(index >= 0) _removeList.splice(index, 1);
 				switch(basic.scheduleType)
@@ -51,14 +51,16 @@ package com.sunmoon.game.schedule
 						break;
 					default:
 						throw new Error("没有此调度类型!");
-						return;
+						return null;
 				}
 				value.destroy();
 			}else{
 				_scheduleAllObject[value.target][value.callBackFunc] = value;
 				_addList.push(value);
 				_addLen = _addList.length;
+				basic = value;
 			}
+			return basic;
 		}
 		
 		/**

@@ -159,5 +159,10 @@ package com.sunmoon.game.map
 		{
 			_zoom = value;
 		}
+
+		public function get target():ICamera
+		{
+			return _target;
+		}
 	}
 }

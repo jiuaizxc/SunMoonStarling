@@ -1,6 +1,5 @@
 package starling.display
 {
-	import flash.display.BitmapData;
 	import flash.geom.Matrix;
 	
 	import starling.display.graphics.Fill;
@@ -9,7 +8,6 @@ package starling.display
 	import starling.display.graphics.Plane;
 	import starling.display.graphics.RoundedRectangle;
 	import starling.display.graphics.Stroke;
-	import starling.display.graphics.StrokeVertex;
 
 	import starling.display.materials.IMaterial;
 	import starling.display.shaders.fragment.TextureFragmentShader;
@@ -52,7 +50,7 @@ package starling.display
 		protected var _precisionHitTestDistance	:Number = 0; 
 		
 		
-        public function Graphics( displayObjectContainer:DisplayObjectContainer )
+        public function Graphics(displayObjectContainer:DisplayObjectContainer)
 		{
 			_container = displayObjectContainer;
 		}

@@ -62,6 +62,11 @@ package com.sunmoon.game.utils
 			return uint(Math.random() * value);
 		}
 		
+		public static function randomCryptoNumber():int
+		{
+			return Math.random() * 1999999998 - 999999999;
+		}
+		
 		/**
 		 *时间比较 
 		 * @param date
@@ -86,7 +91,6 @@ package com.sunmoon.game.utils
 		 */	
 		public static function myAbs_A(value:Number):uint
 		{
-			
 			return (value^(value>>31))-(value>>31);
 		}
 		

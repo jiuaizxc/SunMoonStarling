@@ -8,6 +8,7 @@ package com.sunmoon.game.starling
 	import flash.geom.Rectangle;
 	
 	import starling.core.Starling;
+	import starling.events.ResizeEvent;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
 	
@@ -19,6 +20,7 @@ package com.sunmoon.game.starling
 	public class StarlingStartUp extends Sprite
 	{
 		protected var _starling:Starling;
+		private var _designSize:Point;
 		
 		public function StarlingStartUp()
 		{
@@ -27,6 +29,7 @@ package com.sunmoon.game.starling
 		
 		protected function initStarling(rootClass:Class, designSize:Point, resolutionPolicy:uint, isPC:Boolean = false):void
 		{
+			_designSize = designSize.clone();
 			if(Mobile.isAndroid()) Starling.handleLostContext = true;
 			
 			var W:Number = isPC ? stage.stageWidth : stage.fullScreenWidth;
@@ -45,8 +48,23 @@ package com.sunmoon.game.starling
 			_starling = new Starling(rootClass, stage, new Rectangle(0, 0, W, H));
 			_starling.stage.stageWidth = designSize.x;
 			_starling.stage.stageHeight = designSize.y;
+			_starling.stage.addEventListener(ResizeEvent.RESIZE, onResize);
 			
 			_starling.start();
+		}
+		
+		private function onResize(e:ResizeEvent):void
+		{
+			var designSize:Point = _designSize.clone();
+			var W:Number = e.width;
+			var H:Number = e.height;
+			var sX:Number = W / designSize.x;
+			var sY:Number = H / designSize.y;
+			sY = sX;
+			designSize.y = Math.ceil(H / sY);
+			_starling.viewPort = new Rectangle(0, 0, W, H);
+			_starling.stage.stageWidth = designSize.x;
+			_starling.stage.stageHeight = designSize.y;
 		}
 		
 		protected function deBug():void

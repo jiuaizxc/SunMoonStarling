@@ -7,7 +7,6 @@ package morn.core.components{
 	import flash.display.StageQuality;
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
-	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -99,10 +98,6 @@ package morn.core.components{
 			var bitmapData:BitmapData  = new BitmapData(width, height, true, 0x0);
 			var drawWithQualityFunc:Function = 
 				"drawWithQuality" in bitmapData ? bitmapData["drawWithQuality"] : null;
-			
-			// Beginning with AIR 3.3, we can force a drawing quality. Since "LOW" produces
-			// wrong output oftentimes, we force "MEDIUM" if possible.
-			
 			if (drawWithQualityFunc is Function)
 				drawWithQualityFunc.call(bitmapData, _textField, null, null, null, null, false, StageQuality.MEDIUM);
 			else

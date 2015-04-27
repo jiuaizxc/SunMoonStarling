@@ -46,11 +46,11 @@ package starling.events
         public function EventDispatcher()
         {  }
         
-        /** Registers an event listener at a certain object. */
-        public function addEventListener(type:String, listener:Function):void
+		/** Registers an event listener at a certain object. */
+       public function addEventListener(type:String, listener:Function):void
         {
-            if (mEventListeners == null)
-                mEventListeners = new Dictionary();
+            if (mEventListeners == null) mEventListeners = new Dictionary();
+               
             
             var listeners:Vector.<Function> = mEventListeners[type] as Vector.<Function>;
             if (listeners == null)

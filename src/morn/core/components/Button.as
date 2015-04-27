@@ -4,6 +4,7 @@
  */
 package morn.core.components{
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import morn.core.components.interfaces.ISelect;
 	import morn.core.events.UIEvent;
@@ -32,6 +33,10 @@ package morn.core.components{
 		protected var _skin:String;
 		protected var _autoSize:Boolean = true;
 		
+		
+		private var mEnabled:Boolean;
+		private var mIsDown:Boolean;
+		
 		private var m_Touch:Touch;
 		private var m_GlobalPos:Point = new Point();
 		private var m_LocalPos:Point = new Point();
@@ -52,35 +57,33 @@ package morn.core.components{
 		protected function onMouse(e:TouchEvent):void {
 			if ((_toggle == false && _selected) || _disabled) return;
 			
-			m_Touch = e.getTouch(this, TouchPhase.ENDED);
-			if(m_Touch){
-				m_GlobalPos.setTo(m_Touch.globalX, m_Touch.globalY);
-				m_Touch.target.globalToLocal(m_GlobalPos, m_LocalPos);
-				if(m_Touch.target.hitTest(m_LocalPos)){
-					e.stopPropagation();
-					state = stateMap["mouseUp"];
-					if (_toggle) {
-						selected = !_selected;
-					}
-					if (_clickHandler) {
-						_clickHandler.execute();
-					}
-					sendEvent(UIEvent.SELECT, this);
-					return;
-				}
-			}
+			var m_Touch:Touch = e.getTouch(this);
+			if(m_Touch == null) return;
 			
-			if (_selected == false){
-				m_Touch = e.getTouch(this, TouchPhase.BEGAN);
-				if(m_Touch){
-					e.stopPropagation();
-					state = stateMap["mouseDown"];
-					return;
+			if (m_Touch.phase == TouchPhase.BEGAN && !mIsDown){
+				e.stopPropagation();
+				state = stateMap["mouseDown"];
+				mIsDown = true;
+			}else if (m_Touch.phase == TouchPhase.MOVED && mIsDown){
+				var buttonRect:Rectangle = getBounds(stage);
+				if (m_Touch.globalX < buttonRect.x ||
+					m_Touch.globalY < buttonRect.y ||
+					m_Touch.globalX > buttonRect.x + buttonRect.width ||
+					m_Touch.globalY > buttonRect.y + buttonRect.height)
+				{
+					mIsDown = false;
+					state = stateMap["rollOut"];
 				}
-				
-				m_Touch = e.getTouch(this, TouchPhase.HOVER);
-				if(m_Touch) state = stateMap["rollOver"];
-				else state = stateMap["rollOut"];
+			}else if (m_Touch.phase == TouchPhase.ENDED && mIsDown){
+				e.stopPropagation();
+				mIsDown = false;
+				state = stateMap["rollOut"];
+				if (_toggle) {
+					selected = !_selected;
+				}
+				if (_clickHandler) clickHandler.execute();
+				sendEvent(UIEvent.SELECT, this);
+				return;
 			}
 		}
 		

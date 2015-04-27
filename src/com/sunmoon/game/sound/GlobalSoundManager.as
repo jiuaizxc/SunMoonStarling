@@ -2,7 +2,10 @@ package com.sunmoon.game.sound
 {
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
+	import flash.media.SoundMixer;
 	import flash.media.SoundTransform;
+	
+	import starling.utils.AssetManager;
 	
 	/**
 	 * 
@@ -24,9 +27,42 @@ package com.sunmoon.game.sound
 		
 		private var _effectContiuneList:Object;
 		
+		private var _sound:Object;
+		
 		public function GlobalSoundManager()
 		{
 			_effectContiuneList = new Object();
+			_sound = new Object();
+		}
+		
+		/**
+		 * 添加声音 
+		 * @param value
+		 * 
+		 */		
+		public function onAddSound(Value:AssetManager):void
+		{
+			var names:Vector.<String> = Value.getSoundNames();
+			for each(var key:String in names){
+				if(_sound[key]) continue;
+				_sound[key] = Value.getSound(key);
+			}
+		}
+		
+		/**
+		 * 移除声音 
+		 * @param Value
+		 * 
+		 */		
+		public function onRemoveSound(Value:AssetManager):void
+		{
+			var names:Vector.<String> = Value.getSoundNames();
+			for each(var key:String in names){
+				if(_sound[key]){
+					_sound[key] = null;
+					delete _sound[key];
+				}
+			}
 		}
 		
 		/**
@@ -38,12 +74,22 @@ package com.sunmoon.game.sound
 		 */		
 		public function playBackGroundMusic(resName:String, volume:Number = 1, startTime:int = 0):void
 		{
-			var sound:Sound = SunMoon.assets.getSound(resName);
+			var sound:Sound = _sound[resName];
 			var souTran:SoundTransform;
 			if(_isBackMute) souTran = new SoundTransform(0);
 			else souTran = new SoundTransform(_globalVolume * volume);
 			if(_backGroundMusic) _backGroundMusic.stop();
 			_backGroundMusic = sound.play(0, int.MAX_VALUE, souTran);
+		}
+		
+		/**
+		 * 停止背景音乐 
+		 * 
+		 */		
+		public function stopBackGroundMusic():void
+		{
+			if(_backGroundMusic) _backGroundMusic.stop();
+			_backGroundMusic = null;
 		}
 		
 		/**
@@ -55,7 +101,7 @@ package com.sunmoon.game.sound
 		 */		
 		public function playerEffectSoundContinue(resName:String, volume:Number = 1, startTime:int = 0):void
 		{
-			var sound:Sound = SunMoon.assets.getSound(resName);
+			var sound:Sound = _sound[resName];
 			var souTran:SoundTransform;
 			if(_isEffectMute) souTran = new SoundTransform(0);
 			else souTran = new SoundTransform(_globalVolume * volume);
@@ -73,7 +119,7 @@ package com.sunmoon.game.sound
 		 */		
 		public function playerEffectSoundOnce(resName:String, volume:Number = 1, startTime:int = 0):void
 		{
-			var sound:Sound = SunMoon.assets.getSound(resName);
+			var sound:Sound = _sound[resName];
 			var souTran:SoundTransform;
 			if(_isEffectMute) return;
 			else souTran = new SoundTransform(_globalVolume * volume);
@@ -96,14 +142,12 @@ package com.sunmoon.game.sound
 		
 		public function paused():void
 		{
-			sleepBGMSound();
-			sleepEMSound();
+			SoundMixer.soundTransform = new SoundTransform(0);
 		}
 		
 		public function resume():void
 		{
-			if(!_isBackMute) weakBGMSound();
-			if(!_isEffectMute) weakEMSound();
+			SoundMixer.soundTransform = new SoundTransform(1);
 		}
 		
 		/**
