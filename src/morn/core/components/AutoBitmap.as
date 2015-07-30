@@ -128,6 +128,11 @@ package morn.core.components{
 			}
 		}
 		
+		public function get image():starling.display.Image
+		{
+			return _image;
+		}
+		
 		public function readjustSize():void {
 			_image.readjustSize();
 		}

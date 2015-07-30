@@ -21,6 +21,7 @@ package
 	{
 		/**全局stage引用*/
 		public static var stage:Stage;
+		
 		private static var _instance:SunMoon;
 		
 		private static var _assets:AssetManager; 

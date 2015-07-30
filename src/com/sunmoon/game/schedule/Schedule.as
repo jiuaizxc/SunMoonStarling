@@ -146,7 +146,7 @@ package com.sunmoon.game.schedule
 		private var _runLen:int;
 		private var _runList:Vector.<BasicSchedule>;
 		private var _runSchedule:BasicSchedule;
-		public function update(dlt:Number):void
+		public function update(dlt:int):void
 		{
 			if(_addLen > 0){
 				_scheduleList = _scheduleList.concat(_addList);

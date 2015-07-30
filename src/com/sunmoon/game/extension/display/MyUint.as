@@ -21,12 +21,12 @@ package com.sunmoon.game.extension.display
 		private var _clips:Vector.<Texture>;
 		private var m_image:Image;
 		
-		public function MyUint(url:String)
+		public function MyUint(url:String, clipX:int = 10, clipY:int = 1)
 		{
 			super();
 			touchable = false;
 			_url = url;
-			_clips = BitmapUtils.getClips(StringUtils.assetsName(url), 10, 1);
+			_clips = BitmapUtils.getClips(StringUtils.assetsName(url), clipX, clipY);
 			m_image = new Image(_clips[0]);
 			num = 0;
 		}

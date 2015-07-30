@@ -42,13 +42,22 @@ package com.sunmoon.game.starling
 				case ResolutionPolicy.FIXED_WIDTH:
 					sY = sX;
 					designSize.y = Math.ceil(H / sY);
+					_starling = new Starling(rootClass, stage, new Rectangle(0, 0, W, H));
+					_starling.stage.stageWidth = designSize.x;
+					_starling.stage.stageHeight = designSize.y;
+					break;
+				default:
+					sX = sY = Math.min(sX, sY);
+					var viewPortW:Number = designSize.x * sX;
+					var viewPortH:Number = designSize.y * sY;
+					_starling = new Starling(rootClass, stage, new Rectangle((W - viewPortW) * 0.5, (H - viewPortH) * 0.5, viewPortW, viewPortH));
+					_starling.stage.stageWidth = designSize.x;
+					_starling.stage.stageHeight = designSize.y;
 					break;
 			}
 			
-			_starling = new Starling(rootClass, stage, new Rectangle(0, 0, W, H));
-			_starling.stage.stageWidth = designSize.x;
-			_starling.stage.stageHeight = designSize.y;
-			_starling.stage.addEventListener(ResizeEvent.RESIZE, onResize);
+			
+			//_starling.stage.addEventListener(ResizeEvent.RESIZE, onResize);
 			
 			_starling.start();
 		}

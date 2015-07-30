@@ -10,6 +10,7 @@ package morn.core.utils{
 	import morn.core.starling.filters.AnselFilter;
 	
 	import starling.display.DisplayObject;
+	import starling.filters.ColorMatrixFilter;
 	import starling.filters.FragmentFilter;
 	
 	/**对象工具集*/
@@ -17,7 +18,8 @@ package morn.core.utils{
 		
 		public static function init():void
 		{
-			grayFilter = new AnselFilter();
+			grayFilter = new ColorMatrixFilter();
+			grayFilter.adjustSaturation(-1);
 		}
 		
 		/**添加滤镜*/
@@ -59,7 +61,7 @@ package morn.core.utils{
 			return bytes.readObject();
 		}
 		
-		private static var grayFilter:AnselFilter;
+		private static var grayFilter:ColorMatrixFilter;
 		
 		public static function gray(traget:starling.display.DisplayObject, isGray:Boolean = true):void
 		{
